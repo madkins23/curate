@@ -3,7 +3,10 @@ Curate moves (and optionally renames) media files into folders.
 
 Usage:
 
-    curate [flags]
+    curate [flag]* [sourceFile]+
+
+One or more [sourceFile] arguments can be provided.
+Each [sourceFile] must be an absolute (non-relative) path.
 
 The flags are:
 
@@ -28,9 +31,13 @@ import (
 	"github.com/sqweek/dialog"
 )
 
+var (
+	debug *uint
+)
+
 func main() {
-	flags := flag.NewFlagSet("gardepro", flag.ContinueOnError)
-	debug := flags.Uint("debug", 1, "Debug level")
+	flags := flag.NewFlagSet("Curate", flag.ContinueOnError)
+	debug = flags.Uint("debug", 1, "Debug level")
 
 	cof := utilog.ConsoleOrFile{}
 	cof.AddFlagsToSet(flags, "/tmp/curate.log")
@@ -52,4 +59,22 @@ func main() {
 		log.Info().Msg("Curate starting")
 		defer log.Info().Msg("Curate finished")
 	}
+
+	baseLog := log.Logger
+
+	// Handle the source files.
+	for _, arg := range flags.Args() {
+		log.Logger = baseLog.With().Str("source", arg).Logger()
+		if err := processSource(arg); err != nil {
+			log.Error().Err(err).Msg("Process Failed")
+			dialog.Message(err.Error() + "\n" + arg).Title("Process Error").Error()
+		}
+	}
+}
+
+func processSource(source string) error {
+	if *debug > 0 {
+		log.Info().Msg("Processing")
+	}
+	return errors.New("Bugger!")
 }
