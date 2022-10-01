@@ -10,10 +10,16 @@ import (
 )
 
 var (
+	// ErrIdentical is returned if a pre-existing file is identical to the new file.
 	ErrIdentical = errors.New("identical files")
-	fileCompare  = equalfile.New(nil, equalfile.Options{})
+
+	// fileCompare object compares two files using github.com/udhos/equalfile.
+	fileCompare = equalfile.New(nil, equalfile.Options{})
 )
 
+// CopyFile copies the source file to the specified target path,
+// checking for pre-existing files with the target path.
+// ErrIdentical is returned if a pre-existing file is identical to the new file.
 func CopyFile(source, target string) error {
 	if _, err := os.Stat(target); err == nil {
 		if equal, err := fileCompare.CompareFile(source, target); err != nil {
@@ -33,6 +39,8 @@ func CopyFile(source, target string) error {
 	return nil
 }
 
+// copyFile copies the source file to the specified target path.
+// No checks are done for pre-existing files with the target path.
 func copyFile(source, target string) error {
 	sourceFile, err := os.Open(source)
 	if err != nil {

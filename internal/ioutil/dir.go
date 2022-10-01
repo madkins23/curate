@@ -11,6 +11,7 @@ var (
 	errNonExistent  = errors.New("directory does not exist")
 )
 
+// CheckDir checks to see if the specified directory exists and if not returns an error.
 func CheckDir(dir string) error {
 	if stat, err := os.Stat(dir); err == nil {
 		if !stat.IsDir() {

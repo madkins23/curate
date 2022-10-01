@@ -10,6 +10,8 @@ Each [sourceFile] must be an absolute (non-relative) path.
 
 The flags are:
 
+    -target=[directory path]
+        The destination directory for the media files (required)
     -alert
         Show errors in alert panels in addition to logging them [false]
     -console
@@ -47,13 +49,13 @@ var (
 )
 
 func main() {
+	// Configure command-line flags.
 	flags := flag.NewFlagSet("Curate", flag.ContinueOnError)
 	flags.BoolVar(&alert, "alert", false, "Show error alerts")
 	flags.UintVar(&debug, "debug", 1, "Debug level")
 	flags.StringVar(&target, "target", "", "Destination directory")
 	cof := utilLog.ConsoleOrFile{}
 	cof.AddFlagsToSet(flags, "/tmp/curate.log")
-
 	if err := flags.Parse(os.Args[1:]); err != nil {
 		if !errors.Is(err, flag.ErrHelp) {
 			if alert {
@@ -65,6 +67,7 @@ func main() {
 		return
 	}
 
+	// Configure logging.
 	if err := cof.Setup(); err != nil {
 		if alert {
 			dialog.Message(err.Error()).Title("Log File Creation").Error()
@@ -87,6 +90,8 @@ func main() {
 			return event.Str("target", target)
 		})
 	}
+
+	// Create a log with the target string added to each log entry.
 	baseLog := log.Logger.With().Str("target", target).Logger()
 
 	// Handle the source files.
@@ -101,6 +106,9 @@ func main() {
 	}
 }
 
+// fatalError logs the specified message and any non-nil error,
+// optionally displaying an alert window to the user in real-time,
+// then exits the program.
 func fatalError(message string, err error, extra func(*zerolog.Event) *zerolog.Event) {
 	msg := message
 	if err != nil {
@@ -122,6 +130,7 @@ func fatalError(message string, err error, extra func(*zerolog.Event) *zerolog.E
 	event.Msg(message)
 }
 
+// processSource optionally renames and then copies a single source file to the target directory.
 func processSource(source string) error {
 	if debug > 0 {
 		log.Info().Msg("Processing")
