@@ -3,6 +3,7 @@ module github.com/madkins23/curate
 go 1.18
 
 require (
+	github.com/abema/go-mp4 v0.7.2
 	github.com/dsoprea/go-exif/v3 v3.0.0-20210625224831-a6301f85c82b
 	github.com/madkins23/go-utils v1.29.4
 	github.com/rs/zerolog v1.28.0
@@ -16,6 +17,7 @@ require (
 	github.com/dsoprea/go-utility/v2 v2.0.0-20200717064901-2fccff4aa15e // indirect
 	github.com/go-errors/errors v1.4.2 // indirect
 	github.com/golang/geo v0.0.0-20210211234256-740aa86cb551 // indirect
+	github.com/google/uuid v1.3.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect
 	golang.org/x/net v0.0.0-20221002022538-bcab6841153b // indirect

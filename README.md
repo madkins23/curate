@@ -139,6 +139,7 @@ The application runs once for each drag and drop.
 
 Curate uses the following Go packages:
 
+* [github.com/abema/go-mp4](https://github.com/abema/go-mp4) to get MP4 creation date/time
 * [github.com/dsoprea/go-exif](https://github.com/dsoprea/go-exif) to get JPG creation date/time
 * [github.com/madkins23/go-utils](https://github.com/madkins23/go-utils) for error messages and log file configuration
 * [github.com/rs/zerolog](https://github.com/rs/zerolog) for pretty logging

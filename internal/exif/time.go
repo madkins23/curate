@@ -8,11 +8,10 @@ import (
 	EXIFcommon "github.com/dsoprea/go-exif/v3/common"
 )
 
+// GetCreationTime acquires the creation time of a source with EXIF properties.
 func GetCreationTime(source string) (time.Time, error) {
-	var ct time.Time
-
 	const creationTimeID = 0x132
-
+	var ct time.Time
 	if value, err := getValue(source, creationTimeID); err != nil {
 		return ct, fmt.Errorf("get EXIF value: %w", err)
 	} else if whenStr, ok := value.(string); !ok {
@@ -26,6 +25,7 @@ func GetCreationTime(source string) (time.Time, error) {
 	return ct, nil
 }
 
+// getIndex acquires an index of EXIF properties.
 func getIndex(source string) (EXIF.IfdIndex, error) {
 	var index EXIF.IfdIndex
 	if rawExif, err := EXIF.SearchFileAndExtractExif(source); err != nil {
@@ -42,6 +42,11 @@ func getIndex(source string) (EXIF.IfdIndex, error) {
 	}
 }
 
+// getValue acquires the value of an EXIF property specified by tag ID.
+// Tag names may be different for different devices but IDs seem to be fixed.
+// IDs are only found within the IFD/Exif subtree of the index object returned by getIndex.
+//
+// ID resource: https://exiftool.org/TagNames/EXIF.html
 func getValue(source string, tagID uint16) (interface{}, error) {
 	index, err := getIndex(source)
 	if err != nil {
