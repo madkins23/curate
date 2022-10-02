@@ -4,8 +4,8 @@ github.com/TheTitanrain/w32 v0.0.0-20200114052255-2654d97dbd3d/go.mod h1:peYoMnc
 github.com/coreos/go-systemd/v22 v22.3.3-0.20220203105225-a9a7ef127534/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSVTIJ3seZv2GcEnc=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/godbus/dbus/v5 v5.0.4/go.mod h1:xhWf0FNVPg57R7Z0UbKHbJfkEywrmjJnf7w5xrFpKfA=
-github.com/madkins23/go-utils v1.29.3 h1:IRYSqfWQNwfIk5ClpfTz5d/YiI5wPU/9lFVtd9hJn1g=
-github.com/madkins23/go-utils v1.29.3/go.mod h1:qXt35t0ynx60YAySTcuAoi4dIzROKU5VsBWiuLQBG3Y=
+github.com/madkins23/go-utils v1.29.4 h1:6s+9Mo7CFXH7q+Ref86BqolOKLIivfaK/WYhL9mgYTY=
+github.com/madkins23/go-utils v1.29.4/go.mod h1:qXt35t0ynx60YAySTcuAoi4dIzROKU5VsBWiuLQBG3Y=
 github.com/mattn/go-colorable v0.1.12/go.mod h1:u5H1YNBxpqRaxsYJYSkiCWKzEfiAb1Gb520KVy5xxl4=
 github.com/mattn/go-colorable v0.1.13 h1:fFA4WZxdEF4tXPZVKMLwD8oUnCTTo08duU7wxecdEvA=
 github.com/mattn/go-colorable v0.1.13/go.mod h1:7S9/ev0klgBDR4GtXTXX8a3vIGJpMovkB8vQcUbaXHg=

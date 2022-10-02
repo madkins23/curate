@@ -3,7 +3,7 @@ module github.com/madkins23/curate
 go 1.18
 
 require (
-	github.com/madkins23/go-utils v1.29.3
+	github.com/madkins23/go-utils v1.29.4
 	github.com/rs/zerolog v1.28.0
 	github.com/sqweek/dialog v0.0.0-20220809060634-e981b270ebbf
 	github.com/udhos/equalfile v0.3.0
