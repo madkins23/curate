@@ -2,28 +2,28 @@
 Curate moves (and optionally renames) media files into folders.
 
 Usage:
-
-    curate [flag]* [sourceFile]+
+  curate [flag]* [sourceFile]+
 
 One or more [sourceFile] arguments can be provided.
 Each [sourceFile] must be an absolute (non-relative) path.
 
 The flags are:
-
-    -target=[directory path]
-        The destination directory for the media files (required)
-    -alert
-        Show errors in alert panels in addition to logging them [false]
-    -console
-        Log to the console instead of the specified log file [false]
-    -alert
-        Show error
-    -logFile
-        Log file path [/tmp/curate.log]
-    -logJSON
-        Log output as JSON items [false]
-    -debug
-        Debugging level [1] (0..1)
+  -alert
+    	Show errors in alert panels in addition to logging them
+  -console
+    	Log to the console instead of the specified log file
+  -debug uint
+    	Debugging level (default 1)
+  -logFile string
+    	Log file path (default "/tmp/curate.log")
+  -logJSON
+    	Log output to file as JSON objects
+  -normalize
+    	Normalize basename(s) of source file(s) (default true)
+  -target string
+    	The destination directory for the media files
+  -unmatched
+    	When normalizing, copy files with unrecognized formats
 */
 package main
 
@@ -40,20 +40,26 @@ import (
 	"github.com/sqweek/dialog"
 
 	"github.com/madkins23/curate/internal/ioutil"
+	"github.com/madkins23/curate/internal/name"
 )
 
 var (
-	alert  bool
-	debug  uint
-	target string
+	alert     bool
+	debug     uint
+	normalize bool
+	target    string
+	unmatched bool
 )
 
 func main() {
 	// Configure command-line flags.
+	// TODO: Flag to separate files into years?
 	flags := flag.NewFlagSet("Curate", flag.ContinueOnError)
-	flags.BoolVar(&alert, "alert", false, "Show error alerts")
-	flags.UintVar(&debug, "debug", 1, "Debug level")
-	flags.StringVar(&target, "target", "", "Destination directory")
+	flags.BoolVar(&alert, "alert", false, "Show errors in alert panels in addition to logging them")
+	flags.UintVar(&debug, "debug", 1, "Debugging level")
+	flags.StringVar(&target, "target", "", "The destination directory for the media files")
+	flags.BoolVar(&normalize, "normalize", true, "Normalize basename(s) of source file(s)")
+	flags.BoolVar(&unmatched, "unmatched", false, "When normalizing, copy files with unrecognized formats")
 	cof := utilLog.ConsoleOrFile{}
 	cof.AddFlagsToSet(flags, "/tmp/curate.log")
 	if err := flags.Parse(os.Args[1:]); err != nil {
@@ -95,12 +101,16 @@ func main() {
 	baseLog := log.Logger.With().Str("target", target).Logger()
 
 	// Handle the source files.
-	for _, arg := range flags.Args() {
-		log.Logger = baseLog.With().Str("source", arg).Logger()
-		if err := processSource(arg); err != nil {
-			log.Error().Err(err).Msg("Process Failed")
+	for _, source := range flags.Args() {
+		log.Logger = baseLog.With().Str("source", source).Logger()
+		if err := processSource(source); err != nil {
+			if errors.Is(err, name.ErrNoPattern) {
+				log.Warn().Str("reason", err.Error()).Msg("Skipping Copy")
+			} else {
+				log.Error().Err(err).Msg("Copy Failed")
+			}
 			if alert {
-				dialog.Message(err.Error() + "\n" + arg).Title("Process Error").Error()
+				dialog.Message(err.Error() + "\n" + source).Title("Process Error").Error()
 			}
 		}
 	}
@@ -136,19 +146,35 @@ func processSource(source string) error {
 		log.Info().Msg("Processing")
 	}
 
-	// TODO: Normalize (uniqify?) name if necessary.
-	//  This may include creating a subdirectory.
-	//  Does this include verifying/creating the subdirectory
-	//   or is that done later?
-
-	// Create path from target dir and (subdirectory/)name.
-	tgtPath := path.Join(target, path.Base(source))
+	var err error
+	var basename string
+	if normalize {
+		// Normalize the source path:
+		basename, err = name.Normalize(source)
+		if err != nil {
+			if !errors.Is(err, name.ErrNoPattern) {
+				return fmt.Errorf("normalize base name: %w", err)
+			} else if !unmatched {
+				return err
+			} else if debug > 0 {
+				log.Info().Msg("Copying source with unmatched pattern")
+			}
+		}
+	} else {
+		basename = path.Base(source)
+	}
+	// Create path from target dir and basename.
+	tgtPath := path.Join(target, basename)
 
 	// Copy file:
 	if err := ioutil.CopyFile(source, tgtPath); err != nil {
 		if errors.Is(err, ioutil.ErrIdentical) {
 			if debug > 0 {
-				log.Info().Str("reason", err.Error()).Msg("Skipping file copy")
+				event := log.Info().Str("reason", err.Error())
+				if normalize {
+					event = event.Str("normalized", basename)
+				}
+				event.Msg("Skipping file copy")
 			}
 		} else {
 			fatalError("Copy error", err, func(event *zerolog.Event) *zerolog.Event {
