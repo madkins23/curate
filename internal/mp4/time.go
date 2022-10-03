@@ -21,6 +21,7 @@ func GetCreationTime(source string) (time.Time, error) {
 	} else {
 		// Mvhd/CreationTimeV0 is seconds since Jan 1, 1904 for some reason.
 		ct = time.Date(1904, time.January, 1, 0, 0, 0, 0, time.UTC).
+			// TODO: What about milliseconds?
 			Add(time.Second * time.Duration(payload.CreationTimeV0))
 	}
 

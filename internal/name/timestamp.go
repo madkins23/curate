@@ -11,7 +11,7 @@ import (
 	"github.com/madkins23/curate/internal/mp4"
 )
 
-const fmtGoogleTimestmap = "20060102_150405"
+const fmtGoogleTimestmap = "20060102_150405.000"
 
 var errBadExtension = errors.New("unrecognized file extension")
 
@@ -33,5 +33,7 @@ func makeTimestamp(source string) (string, error) {
 		return "", errBadExtension
 	}
 
-	return creationTime.Format(fmtGoogleTimestmap), nil
+	return strings.Join(
+		strings.Split(creationTime.Format(fmtGoogleTimestmap), "."),
+		""), nil
 }
