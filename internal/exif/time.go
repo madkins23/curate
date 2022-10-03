@@ -2,12 +2,17 @@ package exif
 
 import (
 	"fmt"
-	"math/rand"
-	"regexp"
 	"time"
 
 	EXIF "github.com/dsoprea/go-exif/v3"
 	EXIFcommon "github.com/dsoprea/go-exif/v3/common"
+	"github.com/rs/zerolog/log"
+)
+
+const (
+	fmtCreationDate = "2006:01:02 15:04:05"
+	IDcreationDate  = 0x132
+	IDtimeZone      = 0x882a
 )
 
 // GetCreationTime acquires the creation time of a source with EXIF properties.
@@ -19,10 +24,6 @@ func GetCreationTime(source string) (time.Time, error) {
 		return ct, fmt.Errorf("get EXIF index: %w", err)
 	}
 
-	const IDcreationDate = 0x132
-	const IDsubSeconds = 0x9292
-	const IDtimeZone = 0x882a
-
 	var ok bool
 	var value interface{}
 
@@ -31,27 +32,17 @@ func GetCreationTime(source string) (time.Time, error) {
 		return ct, fmt.Errorf("get creation date value: %w", err)
 	} else if dateTimeStr, ok = value.(string); !ok {
 		return ct, fmt.Errorf("creation date not string")
-	}
-
-	var subSecsStr string
-	if value, err = getValue(index, IDsubSeconds); err != nil {
-		// Subseconds not always available, make up random millis
-		subSecsStr = fmt.Sprintf("%03d", rand.Intn(1000))
-	} else if subSecsStr, ok = value.(string); !ok {
-		return ct, fmt.Errorf("subseconds not string")
-	} else if ptnJustDigits, err := regexp.Compile("\\d{3}"); err != nil {
-		return ct, fmt.Errorf("compile digits pattern: %w", err)
-	} else if !ptnJustDigits.Match([]byte(subSecsStr)) {
-		return ct, fmt.Errorf("subseconds '%s' don't match pattern", subSecsStr)
-	}
-
-	if ct, err = time.Parse("2006:01:02 15:04:05.000", dateTimeStr+"."+subSecsStr); err != nil {
+	} else if ct, err = time.Parse(fmtCreationDate, dateTimeStr); err != nil {
 		return ct, fmt.Errorf("parse creation date: %w", err)
 	}
 
-	// TODO: Parsed time was local, how to get to UTC or do we care?
+	// Don't look for sub-second value, it's probably not there and will be ignored anyway.
+
 	if value, err = getValue(index, IDtimeZone); err != nil {
 		// Time zone not always available, just skip it
+	} else {
+		// Just in case one actually shows up:
+		log.Debug().Interface("time zone(s)", value).Msg("Time zone available!")
 	}
 
 	return ct, nil

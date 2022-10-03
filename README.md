@@ -143,8 +143,10 @@ Curate uses the following Go packages:
 * [github.com/dsoprea/go-exif](https://github.com/dsoprea/go-exif) to get JPG creation date/time
 * [github.com/madkins23/go-utils](https://github.com/madkins23/go-utils) for error messages and log file configuration
 * [github.com/rs/zerolog](https://github.com/rs/zerolog) for pretty logging
+* [github.com/sigurn/crc8](https://github.com/sigurn/crc8) to calculate three digit CRC numbers when milliseconds are not available
 * [github.com/sqweek/dialog](https://github.com/sqweek/dialog)
   to display error messages directly to the user as they occur
   (they are also logged to a file)
 * [github.com/udhos/equalfile](https://github.com/udhos/equalfile) to compare files
   in the case of duplicate target paths
+* [github.com/sigurn/crc8](https://github.com/sigurn/crc8)

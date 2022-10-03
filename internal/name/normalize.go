@@ -11,7 +11,8 @@ import (
 var (
 	ErrNoPattern = errors.New("basename matches no known pattern")
 	errNoPeriods = errors.New("basename has no periods")
-	errTBD       = errors.New("basename pattern not yet implemented")
+	rgxDSC       *regexp.Regexp
+	rgxGoogle    *regexp.Regexp
 )
 
 // Normalize checks a file's basename of the source path for format and uniqueness,
@@ -28,9 +29,9 @@ func Normalize(source string) (string, error) {
 		return "", fmt.Errorf("initialize initPatterns: %w", err)
 	}
 
-	if ptnGoogle.Match(name) {
+	if rgxGoogle.Match(name) {
 		// Just return the basename
-	} else if ptnDSC.Match(name) {
+	} else if rgxDSC.Match(name) {
 		if timestamp, err := makeTimestamp(source); err != nil {
 			return "", fmt.Errorf("making timestamp: %w", err)
 		} else {
@@ -44,22 +45,23 @@ func Normalize(source string) (string, error) {
 	return basename, nil
 }
 
-var (
-	ptnInitialized bool
-	ptnDSC         *regexp.Regexp
-	ptnGoogle      *regexp.Regexp
+const (
+	ptnDSC    = "^DSCF\\d+$"
+	ptnGoogle = "^[[:alpha:]]+_\\d{8}_\\d{9}$"
 )
+
+var rgxInitialized bool
 
 // initPatterns initializes the recognized patterns for file names.
 func initPatterns() error {
-	if !ptnInitialized {
+	if !rgxInitialized {
 		var err error
-		if ptnGoogle, err = regexp.Compile("[[:alpha:]]+_\\d{8}_\\d{9}"); err != nil {
+		if rgxGoogle, err = regexp.Compile(ptnGoogle); err != nil {
 			return fmt.Errorf("compile Google pattern: %w", err)
-		} else if ptnDSC, err = regexp.Compile("DSCF\\d+"); err != nil {
+		} else if rgxDSC, err = regexp.Compile(ptnDSC); err != nil {
 			return fmt.Errorf("compile DSC pattern: %w", err)
 		}
-		ptnInitialized = true
+		rgxInitialized = true
 	}
 	return nil
 }
