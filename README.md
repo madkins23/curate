@@ -103,11 +103,20 @@ If they match then the copy is redundant and it is skipped.
 If the file contents are _not_ identical then an error is flagged in the log
 and via an alert box if the `-alert` flag is set.
 
+### Early Termination on Error
+
+If the `-alert` flag is set and a source file fails to copy for a reason
+that shows the alert dialog the loop will terminate.
+Without the `-alert` flag the loop will continue and all errors will be logged.
+
+Having to click 'OK' on dozens of source files because of some
+user error is _really_ annoying.
+
 ## Installation and Usage
 
 This isn't the command-line usage which can be found in the
 [application source](https://github.com/madkins23/curate/blob/main/cmd/curate/curate.go),
-the [godoc](https://pkg.go.dev/github.com/madkins23/curate/cmd/curate),
+the [godoc](https://pkg.go.dev/github.com/madkins23/curate),
 or by building and running it without arguments or with the `-h` argument.
 This section describes how I configure the application on my system.
 
@@ -123,7 +132,7 @@ This is my `~/Desktop/coyotes.desktop` file:
     Type=Application
     Name=Curate
     Comment=Target for dropping photos and videos to the NAS
-    Exec=/home/marc/bin/curate -alert -target=/home/marc/tmp/nasdir %F
+    Exec=/home/user/bin/curate -alert -target=/tmp/nasdir %F
     Terminal=false
     Categories=Utility;Application;
 
