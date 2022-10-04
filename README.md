@@ -116,7 +116,7 @@ user error is _really_ annoying.
 
 This isn't the command-line usage which can be found in the
 [application source](https://github.com/madkins23/curate/blob/main/cmd/curate/curate.go),
-the [godoc](https://pkg.go.dev/github.com/madkins23/curate),
+the [godoc](https://pkg.go.dev/github.com/madkins23/curate/cmd/curate),
 or by building and running it without arguments or with the `-h` argument.
 This section describes how I configure the application on my system.
 
