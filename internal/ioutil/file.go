@@ -13,6 +13,9 @@ var (
 	// ErrIdentical is returned if a pre-existing file is identical to the new file.
 	ErrIdentical = errors.New("identical files")
 
+	// errDifferent is returned if a pre-existing file is different from the new file.
+	errDifferent = errors.New("pre-existing file not identical")
+
 	// fileCompare object compares two files using github.com/udhos/equalfile.
 	fileCompare = equalfile.New(nil, equalfile.Options{})
 )
@@ -27,7 +30,7 @@ func CopyFile(source, target string) error {
 		} else if equal {
 			return ErrIdentical
 		} else {
-			return fmt.Errorf("pre-existing file not identical")
+			return errDifferent
 		}
 	} else if errors.Is(err, os.ErrNotExist) {
 		if err := copyFile(source, target); err != nil {

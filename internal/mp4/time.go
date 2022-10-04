@@ -13,7 +13,7 @@ func GetCreationTime(source string) (time.Time, error) {
 	var ct time.Time
 
 	if metadata, err := getMetadata(source); err != nil {
-		return ct, fmt.Errorf("get metadata: %w")
+		return ct, fmt.Errorf("get metadata: %w", err)
 	} else if len(metadata) != 1 {
 		return ct, fmt.Errorf("wrong number of metadata results (%d != 1): %w", len(metadata), err)
 	} else if payload, ok := metadata[0].Payload.(*mp4.Mvhd); !ok {
