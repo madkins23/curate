@@ -47,7 +47,7 @@ some new media files were overwriting older files with the same names.
 
 For these cameras
 
-* sub-folder names for these cameras are **TBD** and
+* sub-folder names for these cameras are named with four digit numbers and
 * file names are of the form `DSCF####.ext`
 
 where
@@ -82,31 +82,33 @@ I have also seen "type" information such as `PANO` in older files.
 
 ### Renaming
 
-**TBD**
+Source files are renamed to conform (more or less) to the way
+Google names them `???_YYYYMMDD_HHMMSSmmm.ext`.
+The `???` sequence varies depending on the source device.
+The milliseconds in `mmm` will only be provided where convenient.
 
-This application renames an individual file and copies it to the NAS.
-The renaming is done in a way that:
-
-* separates the media into subdirectories by year,
-* begins with the date and time so name ordering is chronological, and
-* preserves the original basename (for no good reason).
-
-I am counting on the two cameras not taking useful pictures
-at the exact same second with the exact same base name.
-There is code to check for non-identical overwrites.
+The milliseconds are currently not convenient,
+so they are filled in with a three-digit string representing
+an 8-bit CRC calculated from file contents.
+This provides a constant number for a given file (as opposed to a random value)
+and keeps files that just happen to be created in the same second from colliding.
+For example, two deer cameras that happen to snap photos at the exact same second.
 
 ### Copying
 
-**TBD**
+When files are copied to the target directory the file names may collide.
+In this case the file contents are compared to see if they are identical.
+If they match then the copy is redundant and it is skipped.
+
+If the file contents are _not_ identical then an error is flagged in the log
+and via an alert box if the `-alert` flag is set.
 
 ## Installation and Usage
-
-**TBD**
 
 This isn't the command-line usage which can be found in the
 [application source](https://github.com/madkins23/curate/blob/main/cmd/curate/curate.go),
 the [godoc](https://pkg.go.dev/github.com/madkins23/curate/cmd/curate),
-or by building and running it without arguments.
+or by building and running it without arguments or with the `-h` argument.
 This section describes how I configure the application on my system.
 
 When I thought about how I wanted to use this application,
@@ -128,7 +130,8 @@ This is my `~/Desktop/coyotes.desktop` file:
 The file shows up on the desktop as a generic icon
 since I didn't bother to configure a custom icon.
 The file must have executable permission and
-`Allow Launching` must be set in the right-click properties menu.
+`Allow Launching` must be set in the right-click properties menu for the icon
+(under Ubuntu, anyway, I have not tested this elsewhere).
 
 When I drag and drop one or more files from the memory chip to the icon
 the `curate` application is called with

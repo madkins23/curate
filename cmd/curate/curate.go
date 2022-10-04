@@ -111,6 +111,8 @@ func main() {
 			}
 			if alert {
 				dialog.Message(err.Error() + "\n" + source).Title("Process Error").Error()
+				log.Info().Msg("Stop processing after first alert") // it's way too annoying.
+				break
 			}
 		}
 	}
