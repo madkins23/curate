@@ -11,8 +11,8 @@ import (
 
 const (
 	fmtCreationDate = "2006:01:02 15:04:05"
-	IDcreationDate  = 0x132
-	IDtimeZone      = 0x882a
+	idCreationDate  = 0x132
+	idTimeZone      = 0x882a
 )
 
 // GetCreationTime acquires the creation time of a source with EXIF properties.
@@ -28,7 +28,7 @@ func GetCreationTime(source string) (time.Time, error) {
 	var value interface{}
 
 	var dateTimeStr string
-	if value, err = getValue(index, IDcreationDate); err != nil {
+	if value, err = getValue(index, idCreationDate); err != nil {
 		return ct, fmt.Errorf("get creation date value: %w", err)
 	} else if dateTimeStr, ok = value.(string); !ok {
 		return ct, fmt.Errorf("creation date not string")
@@ -38,7 +38,7 @@ func GetCreationTime(source string) (time.Time, error) {
 
 	// Don't look for sub-second value, it's probably not there and will be ignored anyway.
 
-	if value, err = getValue(index, IDtimeZone); err != nil {
+	if value, err = getValue(index, idTimeZone); err != nil {
 		// Time zone not always available, just skip it
 	} else {
 		// Just in case one actually shows up:
