@@ -22,7 +22,9 @@ func GetCreationTime(source string) (time.Time, error) {
 		// Property mvhd/CreationTimeV0 is seconds since Jan 1, 1904 (UTC) for some reason.
 		// Don't look for sub-second value, it's probably not there and will be ignored anyway.
 		ct = time.Date(1904, time.January, 1, 0, 0, 0, 0, time.UTC).
-			Add(time.Second * time.Duration(payload.CreationTimeV0))
+			Add(time.Second * time.Duration(payload.CreationTimeV0)).
+			// Convert to local time zone.
+			In(time.Local)
 	}
 
 	return ct, nil

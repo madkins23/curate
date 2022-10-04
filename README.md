@@ -36,7 +36,7 @@ or conflicts with older files.
 
 I have two GardePro deer cameras looking across the pasture behind my house.
 These generate JPG and MP4 files in a fairly standard format
-within the DCIM directory of an inserted memory card.
+within the `DCIM` directory of an inserted memory card.
 
 After I review the contents of a memory card I delete the DCIM sub-folders.
 The cameras will then recreate the sub-folders the same names
@@ -47,12 +47,13 @@ some new media files were overwriting older files with the same names.
 
 For these cameras
 
-* sub-folder names for these cameras are named with four digit numbers and
+* sub-folder names for these cameras are named `###MEDIA` and
 * file names are of the form `DSCF####.ext`
 
 where
 
 * `DSCF` likely stands for DSC File
+* `###` is a number from `100` to `999`
 * `####` is a number from `0001` to `9999`
 * `ext` is the basic media type (e.g. `JPG` or `MP4`)
 

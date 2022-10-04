@@ -28,11 +28,12 @@ func GetCreationTime(source string) (time.Time, error) {
 	} else if dateTimeStr, ok = value.(string); !ok {
 		return ct, fmt.Errorf("creation date not string")
 	} else if ct, err = time.Parse(fmtCreationDate, dateTimeStr); err != nil {
+		// This will parse with the local time zone which is probably what is required.
+		// Time zone information is not (normally) available from EXIF.
 		return ct, fmt.Errorf("parse creation date: %w", err)
 	}
 
 	// Don't look for sub-second value, it's probably not there and will be ignored anyway.
-	// Don't look for time zone value, it's probably not there.
 
 	return ct, nil
 }
