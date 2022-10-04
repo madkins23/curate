@@ -94,6 +94,10 @@ This provides a constant number for a given file (as opposed to a random value)
 and keeps files that just happen to be created in the same second from colliding.
 For example, two deer cameras that happen to snap photos at the exact same second.
 
+Source files are renamed based on the pattern of their original name.
+If the pattern is not recognized the renaming fails and the file is not copied.
+The `-unmatched` flag can be used to allow these files to be copied without renaming.
+
 ### Copying
 
 When files are copied to the target directory the file names may collide.
