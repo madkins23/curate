@@ -2,16 +2,13 @@ package exif
 
 import (
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/require"
 )
 
-const filePXL = "../../testdata/PXL_20220215_002116112.jpg"
-
 func TestGetCreationTime(t *testing.T) {
-	date, err := GetCreationTime(filePXL)
+	// fileHasEXIF and checkDate() are from core_test.go.
+	date, err := GetCreationTime(fileHasEXIF)
 	require.NoError(t, err)
-	// From core_test.go:
-	checkDate(t, date, 2022, time.Month(2), 14, 16, 21, 16)
+	checkDate(t, date)
 }

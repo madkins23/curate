@@ -1,6 +1,7 @@
 package exif
 
 import (
+	"os"
 	"testing"
 	"time"
 
@@ -11,12 +12,18 @@ import (
 )
 
 const (
+	fileCant    = "////snoofus.txt"
+	fileNoSuch  = "../../testdata/goober.txt"
 	fileNoEXIF  = "../../testdata/some.txt"
 	fileHasEXIF = "../../testdata/DSCF0013.JPG"
 )
 
 func Test_getIndex(t *testing.T) {
-	_, err := GetIndex(fileNoEXIF)
+	_, err := GetIndex(fileCant)
+	assert.ErrorIs(t, err, os.ErrNotExist)
+	_, err = GetIndex(fileNoSuch)
+	assert.ErrorIs(t, err, os.ErrNotExist)
+	_, err = GetIndex(fileNoEXIF)
 	assert.ErrorIs(t, err, EXIF.ErrNoExif)
 	index, err := GetIndex(fileHasEXIF)
 	assert.NoError(t, err)
@@ -37,16 +44,16 @@ func Test_getValue(t *testing.T) {
 	require.True(t, ok)
 	date, err := time.Parse(fmtCreationDate, valStr)
 	require.NoError(t, err)
-	checkDate(t, date, 2022, time.Month(8), 23, 2, 43, 16)
+	checkDate(t, date)
 }
 
-func checkDate(t *testing.T, date time.Time, year int, month time.Month, day, hour, minute, second int) {
+func checkDate(t *testing.T, date time.Time) {
 	yr, mon, dy := date.Date()
-	assert.Equal(t, year, yr)
-	assert.Equal(t, month, mon)
-	assert.Equal(t, day, dy)
+	assert.Equal(t, 2022, yr)
+	assert.Equal(t, time.Month(8), mon)
+	assert.Equal(t, 23, dy)
 	hr, min, sec := date.Clock()
-	assert.Equal(t, hour, hr)
-	assert.Equal(t, minute, min)
-	assert.Equal(t, second, sec)
+	assert.Equal(t, 2, hr)
+	assert.Equal(t, 43, min)
+	assert.Equal(t, 16, sec)
 }
