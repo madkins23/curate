@@ -3,6 +3,7 @@ package name
 import (
 	"errors"
 	"fmt"
+	"os"
 	"path"
 	"regexp"
 	"strings"
@@ -30,6 +31,12 @@ func Normalize(source string) (string, error) {
 	}
 
 	if rgxGoogle.Match(name) {
+		// Do this check so that results will be consistent.
+		// Other branch(es?) will attempt to access the source,
+		// resulting in an error if the source does not exist.
+		if _, err := os.Stat(source); err != nil {
+			return "", fmt.Errorf("check existence: %w", err)
+		}
 		// Just return the basename
 	} else if rgxDSC.Match(name) {
 		if timestamp, err := makeTimestamp(source); err != nil {

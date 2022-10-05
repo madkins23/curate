@@ -9,8 +9,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rs/zerolog/log"
-
 	"github.com/madkins23/curate/internal/exif"
 	"github.com/madkins23/curate/internal/hash8"
 	"github.com/madkins23/curate/internal/mp4"
@@ -41,11 +39,7 @@ func makeTimestamp(source string) (string, error) {
 	}
 
 	var millis string
-	if nanos := creationTime.Nanosecond(); nanos != 0 {
-		log.Debug().Int("millis", creationTime.Nanosecond()).Msg("Found nanoseconds")
-		millis = fmt.Sprintf("%03d", nanos/1_000_000)
-	} else if millis, err = makeCRC8(source); err != nil {
-		// There was no sub-second time data for this source.
+	if millis, err = makeCRC8(source); err != nil {
 		// Use CRC8 to generate a three digit fake millisecond value.
 		// Using the CRC will result in a constant number for the same file
 		// in case it is processed more than once for some reason.
@@ -61,8 +55,9 @@ func makeCRC8(source string) (string, error) {
 	if file, err := os.Open(source); err != nil {
 		return "", fmt.Errorf("open file: %w", err)
 	} else {
+		defer func() { _ = file.Close() }()
 		hash := hash8.New()
-		if _, err = io.Copy(hash, file); err == nil {
+		if _, err = io.Copy(hash, file); err != nil {
 			return "", fmt.Errorf("calculate hash: %w", err)
 		}
 		return fmt.Sprintf("%03d", hash.Sum8()), nil
