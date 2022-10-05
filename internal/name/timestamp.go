@@ -10,9 +10,9 @@ import (
 	"time"
 
 	"github.com/rs/zerolog/log"
-	"github.com/sigurn/crc8"
 
 	"github.com/madkins23/curate/internal/exif"
+	"github.com/madkins23/curate/internal/hash8"
 	"github.com/madkins23/curate/internal/mp4"
 )
 
@@ -55,25 +55,16 @@ func makeTimestamp(source string) (string, error) {
 	return creationTime.Format(fmtGoogleTimestmap) + millis, nil
 }
 
-var crc8Table = crc8.MakeTable(crc8.CRC8_MAXIM)
-
 // Make a CRC8 string of three digits for the contents of the specified source file.
 // The resulting number will be 000..256, formatted as three digit decimal string with leading zeros.
 func makeCRC8(source string) (string, error) {
 	if file, err := os.Open(source); err != nil {
 		return "", fmt.Errorf("open file: %w", err)
 	} else {
-		buffer := make([]byte, 1024)
-		crc := crc8.Init(crc8Table)
-		for {
-			if size, err := file.Read(buffer); err == nil {
-				crc = crc8.Update(crc, buffer[0:size], crc8Table)
-			} else if errors.Is(err, io.EOF) {
-				break
-			} else {
-				return "", fmt.Errorf("read from file: %w", err)
-			}
+		hash := hash8.New()
+		if _, err = io.Copy(hash, file); err == nil {
+			return "", fmt.Errorf("calculate hash: %w", err)
 		}
-		return fmt.Sprintf("%03d", crc8.Complete(crc, crc8Table)), nil
+		return fmt.Sprintf("%03d", hash.Sum8()), nil
 	}
 }
