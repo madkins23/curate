@@ -1,5 +1,9 @@
 # curate
+
 Program for moving and renaming media files into folders
+
+![GitHub](https://img.shields.io/github/license/madkins23/curate)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/madkins23/curate)
 
 ## Background
 
