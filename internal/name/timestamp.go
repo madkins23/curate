@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	crc8hash "github.com/madkins23/go-hash/pkg/sigurn/crc8"
+	crc8Hash "github.com/madkins23/go-hash/pkg/sigurn/crc8"
 	"github.com/sigurn/crc8"
 
 	"github.com/madkins23/curate/internal/exif"
@@ -58,7 +58,7 @@ func makeCRC8(source string) (string, error) {
 		return "", fmt.Errorf("open file: %w", err)
 	} else {
 		defer func() { _ = file.Close() }()
-		hash := crc8hash.New(crc8.CRC8_MAXIM)
+		hash := crc8Hash.New(crc8.CRC8_MAXIM)
 		if _, err = io.Copy(hash, file); err != nil {
 			return "", fmt.Errorf("calculate hash: %w", err)
 		}
