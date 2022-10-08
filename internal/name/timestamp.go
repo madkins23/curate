@@ -32,7 +32,7 @@ func makeTimestamp(source string) (string, error) {
 		if creationTime, err = exif.GetCreationTime(source); err != nil {
 			return "", fmt.Errorf("get EXIF creation time: %w", err)
 		}
-	case ".mp4":
+	case ".mov", ".mp4":
 		if creationTime, err = mp4.GetCreationTime(source); err != nil {
 			return "", fmt.Errorf("get MP4 creation time: %w", err)
 		}

@@ -53,7 +53,7 @@ func Normalize(source string) (string, error) {
 }
 
 const (
-	ptnDSC    = "^DSCF\\d+$"
+	ptnDSC    = "^DSC[[:alpha:]]\\d+$"
 	ptnGoogle = "^[[:alpha:]]+_\\d{8}_\\d{9}$"
 )
 

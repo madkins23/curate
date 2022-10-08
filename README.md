@@ -4,6 +4,7 @@ Program for moving and renaming media files into folders
 
 ![GitHub](https://img.shields.io/github/license/madkins23/curate)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/madkins23/curate)
+[![Go Reference](https://pkg.go.dev/badge/github.com/madkins23/curate.svg)](https://pkg.go.dev/github.com/madkins23/curate)
 
 ## Background
 
@@ -60,6 +61,21 @@ where
 * `###` is a number from `100` to `999`
 * `####` is a number from `0001` to `9999`
 * `ext` is the basic media type (e.g. `JPG` or `MP4`)
+
+#### Nikon Camera
+
+I have a Nikon camera which generates JPG and Quicktime files.
+For this camera
+
+* sub-folder names for these cameras are named `###NIKON` and
+* file names are of the form `DSCN####.ext`
+
+where
+
+* `DSCN` stands for Digital Still Capture Nikon
+* `###` is a number from `100` to `999`
+* `####` is a number from `0001` to `9999`
+* `ext` is the basic media type (e.g. `JPG` or `MOV`)
 
 #### Google Photos
 
