@@ -3,11 +3,11 @@ module github.com/madkins23/curate
 go 1.18
 
 require (
-	github.com/abema/go-mp4 v0.10.0
-	github.com/dsoprea/go-exif/v3 v3.0.0-20221012082141-d21ac8e2de85
+	github.com/abema/go-mp4 v1.1.1
+	github.com/dsoprea/go-exif/v3 v3.0.1
 	github.com/madkins23/go-hash v1.0.4
-	github.com/madkins23/go-utils v1.33.0
-	github.com/rs/zerolog v1.29.0
+	github.com/madkins23/go-utils v1.40.2
+	github.com/rs/zerolog v1.31.0
 	github.com/sigurn/crc8 v0.0.0-20220107193325-2243fe600f9f
 	github.com/sqweek/dialog v0.0.0-20220809060634-e981b270ebbf
 	github.com/stretchr/testify v1.8.1
@@ -19,14 +19,14 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dsoprea/go-logging v0.0.0-20200710184922-b02d349568dd // indirect
 	github.com/dsoprea/go-utility/v2 v2.0.0-20221003172846-a3e1774ef349 // indirect
-	github.com/go-errors/errors v1.4.2 // indirect
-	github.com/golang/geo v0.0.0-20210211234256-740aa86cb551 // indirect
-	github.com/google/uuid v1.3.0 // indirect
+	github.com/go-errors/errors v1.5.1 // indirect
+	github.com/golang/geo v0.0.0-20230421003525-6adc56603217 // indirect
+	github.com/google/uuid v1.3.1 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.17 // indirect
+	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	golang.org/x/net v0.7.0 // indirect
-	golang.org/x/sys v0.5.0 // indirect
+	golang.org/x/net v0.17.0 // indirect
+	golang.org/x/sys v0.13.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
